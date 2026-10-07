@@ -20,15 +20,13 @@ This produced a concrete implementation plan before any code was written. I revi
 
 ## Development Workflow
 
-Each phase followed the same pattern:
-
-1. Provide Claude with a scoped prompt referencing the relevant tasks
-2. Claude implements the tasks, runs typechecks and tests, marks tasks complete
-3. I manually verify the result in the running application in the browser
-4. If the output is correct, I confirm and move to the next phase; if not, I identify the problem and redirect
-
-For decisions with visual or architectural significance, I asked Claude to recommend a fix or approach before making any changes, and approved or rejected before implementation proceeded.
-
+Each phase followed the same general pattern:
+- I reviewed the planned tasks before implementation and clarified or adjusted them when needed.
+- I provided Claude with a scoped prompt referencing the relevant tasks.
+- Claude implemented the tasks and ran the relevant typechecks and tests.
+- I reviewed and manually tested the implementation before moving on to the next phase.
+- If I found an issue or something that did not match the assignment or my intent, I redirected Claude and verified the correction.
+- For decisions with visual or architectural significance, I asked Claude to recommend an approach before making changes, then reviewed and approved or rejected the recommendation before implementation proceeded.
 ---
 
 ## Autonomy Within Scoped Batches
@@ -52,17 +50,12 @@ When I first ran the application end-to-end with all 10 seed emails, the pipelin
 During live processing, the LLM returned an entity type (`"reference"`) that was not in the defined schema. I identified this from inconsistent graph data and we adjusted the handling so that unexpected entity types would not corrupt the stored graph or cause the application to crash.
 
 **Knowledge graph (most iterative)**
-The knowledge graph required four rounds of correction, all identified through visual testing in the browser:
-
-1. Initial render: nodes appeared as invisible points — React Flow requires its own state hooks (`useNodesState`/`useEdgesState`) for dimension measurement; a no-op change handler broke `fitView`
-2. Grid layout: nodes were evenly spaced but position was unrelated to relationships
-3. Dagre layout: automatic hierarchical layout based on relationships; correct conceptually but rendered top-to-bottom despite `rankdir: 'LR'`
-4. Handle direction: React Flow routes edges between handle positions; changing node handles from `Position.Top`/`Bottom` to `Position.Left`/`Right` fixed the left-to-right flow
+The graph went through several iterations based on my visual testing in the browser. Although the initial implementations worked technically, I wasn't satisfied with how clearly they represented the relationships. I asked Claude to diagnose the issues and recommend an approach before making further changes. We eventually moved to a relationship-aware Dagre layout and adjusted the React Flow configuration until the graph was clear and usable.
 
 For each round, I described the visual problem, asked Claude to diagnose and recommend a fix before touching anything, then approved the change.
 
 **UI corrections**
-Several small UI decisions were reversed after I saw them in the browser: "＋ Add" was reverted to "+ Add Email"; the header background was changed from `bg-blue-50` to `bg-blue-100` after I judged the lighter shade too subtle; consistent header styling was then applied across all four pages.
+During manual browser review, I identified a few small UI improvements. I asked for a subtle header background to create clearer visual separation from the content, and changed the add action to “+ Add Email” so its purpose was immediately clear. The same header styling was then applied consistently across the application.
 
 **Health endpoint**
 I noticed the health endpoint had been registered as `/api/health` rather than `/health` as the spec required. Before changing it, I asked Claude to verify there were no other references to the old path in the codebase, then approved the correction.
