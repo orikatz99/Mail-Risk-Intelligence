@@ -24,10 +24,10 @@ Each story is independently completable and testable.
 
 **Purpose**: Repository skeleton and seed data — no application logic yet.
 
-- [ ] T001 Initialize backend Node.js/TypeScript project in `backend/` (package.json with Express, better-sqlite3, unpdf, mailparser, Zod, groq SDK, tsx; tsconfig.json; vitest.config.ts)
-- [ ] T002 [P] Initialize frontend Vite + React + TypeScript project in `frontend/` (package.json with React 18, React Router 6, Tailwind CSS 3; tsconfig.json; vite.config.ts)
-- [ ] T003 [P] Create `.env.example` at repo root with LLM_PROVIDER, GROQ_API_KEY, GROQ_MODEL, GEMINI_API_KEY, GEMINI_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, PORT variables
-- [ ] T004 [P] Create `mock_mailbox_data.json` at repo root with 10 seed emails covering varied risk scenarios (none/low/medium/high); each entry includes raw_content plus pre-extracted fields (sender, subject, date, risk_level, rationale, tags, entities, relationships) to support US1 independent testing without running the pipeline
+- [x] T001 Initialize backend Node.js/TypeScript project in `backend/` (package.json with Express, better-sqlite3, unpdf, mailparser, Zod, groq SDK, tsx; tsconfig.json; vitest.config.ts)
+- [x] T002 [P] Initialize frontend Vite + React + TypeScript project in `frontend/` (package.json with React 19, React Router 7, Tailwind CSS 4, Vite 8; tsconfig.json; vite.config.ts)
+- [x] T003 [P] Create `.env.example` at repo root with LLM_PROVIDER, GROQ_API_KEY, GROQ_MODEL, GEMINI_API_KEY, GEMINI_MODEL, OLLAMA_BASE_URL, OLLAMA_MODEL, PORT variables
+- [x] T004 [P] Verify `mock_mailbox_data.json` exists at repo root — file is provided with the assignment and must not be recreated or modified; confirmed present and will be used as the seed dataset by the `backend/src/seed.ts` loader (T014)
 
 ---
 
@@ -195,7 +195,7 @@ Phase 7 (US5):
 
 ```bash
 # Phase 1: all four tasks in parallel
-T001 backend init | T002 frontend init | T003 .env.example | T004 seed JSON
+T001 backend init | T002 frontend init | T003 .env.example | T004 verify mock data
 
 # Phase 2: after T001+T002 complete
 T005 db.ts | T006 config.ts | T007 backend types | T010 Tailwind | T011 App.tsx | T012 frontend types | T013 api.ts
@@ -249,6 +249,6 @@ T043 | T044 | T045 | T046
 - [P] = different files, no shared incomplete dependencies
 - Tests in Phase 4 are mandatory (SC-006, constitution Principle IV); all other test tasks are omitted
 - GraphPage (T042) and React Flow (T041) have zero impact on MVP — skip entirely if time is short
-- T004 (mock data) includes pre-processed fields so US1 can be tested without running the pipeline
+- `mock_mailbox_data.json` (verified by T004) includes pre-processed fields so US1 can be tested without running the pipeline
 - T036 (retry) clears existing extraction/risk/entity/relationship rows before re-queuing — prevents stale partial data
 - `retryEmail()` in T037 is stubbed in T032 (DetailPage) until T036/T037 are complete; the stub can simply call `alert('retry not yet implemented')` or no-op

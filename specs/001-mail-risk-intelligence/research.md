@@ -181,13 +181,19 @@ has no dependency on React Flow.
 
 ## Decision 9: Styling
 
-**Decision**: Tailwind CSS v3
+**Decision**: Tailwind CSS v4 (installed: 4.3.3)
 
 **Rationale**: Utility-first CSS satisfies the mobile-first requirement (≤375px
 baseline, progressive enhancement) with minimal custom CSS. The `sm:`/`md:` prefix
-system handles responsive layout changes inline. Tailwind's purge step keeps the
-production bundle small. The user has prior experience with Tailwind, removing
-the learning curve cost.
+system handles responsive layout changes inline. The user has prior experience with
+Tailwind, removing the learning curve cost. v4 was installed as the current npm
+latest; its Vite plugin (`@tailwindcss/vite`) integrates cleanly with the existing
+Vite configuration.
+
+**v4 configuration note**: Tailwind v4 uses a CSS-first approach — no
+`tailwind.config.js`. The single setup line is `@import "tailwindcss"` in
+`src/index.css`. The `@tailwindcss/vite` plugin handles all optimization
+(content scanning, dead code elimination via Lightning CSS) automatically.
 
 **Alternatives considered**:
 - CSS Modules: More explicit, but slower iteration on responsive layouts.

@@ -18,7 +18,7 @@ LLM: Groq free API (primary).
 
 **Language/Version**: Node.js 20+ / TypeScript 5+ (backend and frontend)
 **Primary Dependencies**: Express 4, better-sqlite3, unpdf, mailparser, Zod, groq SDK;
-React 18, React Router 6, Tailwind CSS 3, Vite 5
+React 19, React Router 7, Tailwind CSS 4, Vite 8
 **Storage**: SQLite — single `mailbox.db` file at repo root, accessed via better-sqlite3
 **Testing**: Vitest (backend unit + integration tests, frontend component tests)
 **Target Platform**: Local development server (no deployment target)
