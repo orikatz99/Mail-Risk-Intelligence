@@ -2,8 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import { config } from './config';
+import { seed } from './seed';
 import emailsRouter from './routes/emails';
 import graphRouter from './routes/graph';
+
+seed();
 
 export const app = express();
 

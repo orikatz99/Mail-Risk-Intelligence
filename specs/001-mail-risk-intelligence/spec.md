@@ -28,15 +28,19 @@ identify which emails require urgent attention.
 discoverable or usable. This is the entry point for all subsequent workflows.
 
 **Independent Test**: Seed `mock_mailbox_data.json` on first run, open the
-app — all 10 seed emails appear in the list with correct metadata and
-color-coded risk badges. The view functions fully without any other story
-implemented.
+app — all 10 seed emails appear in the inbox list in `pending` state
+immediately. The inbox view renders rows and status indicators without
+pipeline results. Once the pipeline processes them (US2), risk badges and
+metadata populate. The inbox rendering itself — rows, status indicators,
+polling, responsive layout — is independently testable before US2 is
+complete.
 
 **Acceptance Scenarios**:
 
 1. **Given** the app has been started for the first time, **When** the user
-   opens the inbox, **Then** all 10 seed emails are listed with sender,
-   subject, date, and a risk badge.
+   opens the inbox, **Then** all 10 seed emails are listed; each shows a
+   `pending` status indicator initially; sender, subject, date, and risk
+   badge appear once the pipeline has processed each email.
 2. **Given** seed data is already loaded, **When** the user opens the app
    again, **Then** no duplicate emails appear (seeding is idempotent).
 3. **Given** the inbox contains emails of mixed risk levels, **When** the

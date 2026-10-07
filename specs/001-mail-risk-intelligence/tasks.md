@@ -55,18 +55,18 @@ Each story is independently completable and testable.
 
 **Goal**: Analyst sees a risk-sorted inbox of all emails with color-coded badges.
 
-**Independent Test**: Start the app on a fresh DB — all 10 seed emails appear in the inbox list with sender, subject, date, and correct risk badges. No pipeline run required (seed loader populates all tables directly from mock_mailbox_data.json).
+**Independent Test**: Start the app on a fresh DB — all 10 seed emails appear in the inbox list in `pending` state immediately after startup. The inbox view renders rows, handles all email status states, and polls for updates. Risk badges populate as the pipeline processes each email (US2).
 
-- [ ] T014 [US1] Implement seed loader in `backend/src/seed.ts` — read `mock_mailbox_data.json`; check if seeds already exist (idempotency); insert each email as `done` into emails, extractions, risk_assessments, entities, relationships tables directly (bypassing the pipeline — seed data is pre-processed); call `seed()` from `backend/src/index.ts` startup before the server begins accepting requests
-- [ ] T015 [US1] Implement `GET /api/emails` in `backend/src/routes/emails.ts` — run the risk-sorted JOIN query from data-model.md (emails LEFT JOIN extractions LEFT JOIN risk_assessments); return EmailSummary array; handle empty result with empty array
-- [ ] T016 [P] [US1] Add `getEmails(): Promise<EmailSummary[]>` to `frontend/src/services/api.ts`
-- [ ] T017 [P] [US1] Create `RiskBadge` component in `frontend/src/components/RiskBadge.tsx` — accept `risk_level: RiskLevel | null` prop; render color-coded Tailwind pill for none (gray), low (blue), medium (amber), high (red); verify all four colors meet WCAG AA contrast on white background; render "Processing" neutral badge when null
-- [ ] T018 [P] [US1] Create `EmptyState` component in `frontend/src/components/EmptyState.tsx` — accept `message: string` prop; render centered icon + text; used when inbox has no emails
-- [ ] T019 [P] [US1] Create `ErrorState` component in `frontend/src/components/ErrorState.tsx` — accept `message: string` and optional `onRetry: () => void` props; render error message with retry button when onRetry is provided
-- [ ] T020 [US1] Create `EmailListItem` component in `frontend/src/components/EmailListItem.tsx` — render single inbox row: sender, subject, date, RiskBadge; show placeholder text for null fields (email is pending/processing); wrap in React Router Link to `/emails/:id`; apply Tailwind responsive layout for ≤375px viewport
-- [ ] T021 [US1] Implement `InboxPage` in `frontend/src/pages/InboxPage.tsx` — on mount call `getEmails()` via useEffect; manage loading/error/data state with useState; render list of EmailListItem; show EmptyState when list is empty; show ErrorState on fetch failure; poll with setInterval every 3s while any email has status pending or processing; clear interval when all emails are done or failed; link to AddEmailPage
+- [x] T014 [US1] Implement seed loader in `backend/src/seed.ts` — read `mock_mailbox_data.json`; check if seeds already exist (idempotency — skip if any email with `source='seed'` is present); insert each email as `pending` into the emails table with `source='seed'` and its `raw_content`; call `seed()` from `backend/src/index.ts` startup before the server begins accepting requests; pipeline processing of the seeded emails is handled by T025
+- [x] T015 [US1] Implement `GET /api/emails` in `backend/src/routes/emails.ts` — run the risk-sorted JOIN query from data-model.md (emails LEFT JOIN extractions LEFT JOIN risk_assessments); return EmailSummary array; handle empty result with empty array
+- [x] T016 [P] [US1] Add `getEmails(): Promise<EmailSummary[]>` to `frontend/src/services/api.ts`
+- [x] T017 [P] [US1] Create `RiskBadge` component in `frontend/src/components/RiskBadge.tsx` — accept `risk_level: RiskLevel | null` prop; render color-coded Tailwind pill for none (gray), low (blue), medium (amber), high (red); verify all four colors meet WCAG AA contrast on white background; render "Processing" neutral badge when null
+- [x] T018 [P] [US1] Create `EmptyState` component in `frontend/src/components/EmptyState.tsx` — accept `message: string` prop; render centered icon + text; used when inbox has no emails
+- [x] T019 [P] [US1] Create `ErrorState` component in `frontend/src/components/ErrorState.tsx` — accept `message: string` and optional `onRetry: () => void` props; render error message with retry button when onRetry is provided
+- [x] T020 [US1] Create `EmailListItem` component in `frontend/src/components/EmailListItem.tsx` — render single inbox row: sender, subject, date, RiskBadge; show placeholder text for null fields (email is pending/processing); wrap in React Router Link to `/emails/:id`; apply Tailwind responsive layout for ≤375px viewport
+- [x] T021 [US1] Implement `InboxPage` in `frontend/src/pages/InboxPage.tsx` — on mount call `getEmails()` via useEffect; manage loading/error/data state with useState; render list of EmailListItem; show EmptyState when list is empty; show ErrorState on fetch failure; poll with setInterval every 3s while any email has status pending or processing; clear interval when all emails are done or failed; link to AddEmailPage
 
-**Checkpoint**: US1 complete and independently testable — inbox renders all seed emails with risk badges on cold start.
+**Checkpoint**: US1 complete and independently testable — inbox renders all seed emails in `pending` state on cold start; handles loading, empty, and error states correctly.
 
 ---
 
@@ -249,6 +249,6 @@ T043 | T044 | T045 | T046
 - [P] = different files, no shared incomplete dependencies
 - Tests in Phase 4 are mandatory (SC-006, constitution Principle IV); all other test tasks are omitted
 - GraphPage (T042) and React Flow (T041) have zero impact on MVP — skip entirely if time is short
-- `mock_mailbox_data.json` (verified by T004) includes pre-processed fields so US1 can be tested without running the pipeline
+- `mock_mailbox_data.json` (verified by T004) contains raw email content; seed emails go through the same Agent A → Agent B pipeline as user-added emails
 - T036 (retry) clears existing extraction/risk/entity/relationship rows before re-queuing — prevents stale partial data
 - `retryEmail()` in T037 is stubbed in T032 (DetailPage) until T036/T037 are complete; the stub can simply call `alert('retry not yet implemented')` or no-op

@@ -14,3 +14,6 @@ dist/
 
 # Logs
 *.log
+
+*.db-wal
+*.db-shm

@@ -1,3 +1,5 @@
+import type { EmailSummary } from '../types'
+
 const BASE_URL = 'http://localhost:3000/api'
 
 export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
@@ -15,4 +17,8 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
   }
 
   return res.json() as Promise<T>
+}
+
+export function getEmails(): Promise<EmailSummary[]> {
+  return apiFetch<EmailSummary[]>('/emails')
 }
