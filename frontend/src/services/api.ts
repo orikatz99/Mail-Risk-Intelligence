@@ -1,4 +1,4 @@
-import type { EmailDetail, EmailSummary } from '../types'
+import type { EmailDetail, EmailSummary, GraphResponse } from '../types'
 
 const BASE_URL = 'http://localhost:3000/api'
 
@@ -43,4 +43,8 @@ export function uploadEmailFile(file: File): Promise<EmailSummary> {
 
 export function retryEmail(id: string): Promise<EmailSummary> {
   return apiFetch<EmailSummary>(`/emails/${id}/retry`, { method: 'POST' })
+}
+
+export function getGraph(): Promise<GraphResponse> {
+  return apiFetch<GraphResponse>('/graph')
 }

@@ -128,10 +128,10 @@ Each story is independently completable and testable.
 
 **⚠️ NOTE**: This phase begins only after US1–US4 are complete and verified.
 
-- [ ] T039 [US5] Implement `GET /api/graph` in `backend/src/routes/graph.ts` — run node deduplication query (GROUP BY type, normalized_value with email_count) and edge query from data-model.md; build node ids as `{type}::{normalized_value}`; build edge ids from source + target + relationship_type; return GraphResponse shape from contracts/api.md; register route in `backend/src/index.ts`
-- [ ] T040 [P] [US5] Add `getGraph(): Promise<GraphResponse>` to `frontend/src/services/api.ts`
-- [ ] T041 [P] [US5] Install `reactflow` in `frontend/` and configure in vite.config.ts; import React Flow CSS in `frontend/src/main.tsx`
-- [ ] T042 [US5] Implement `GraphPage` in `frontend/src/pages/GraphPage.tsx` — fetch via getGraph() on mount; manage loading/error/data state; map API nodes → React Flow nodes (label from node.label, type badge from node.type, email_count subtitle); map API edges → React Flow edges (label from relationship_type); render ReactFlow component with pan/zoom enabled; on node click highlight connected edges; show EmptyState when nodes array is empty; apply Tailwind responsive layout with touch-friendly controls
+- [x] T039 [US5] Implement `GET /api/graph` in `backend/src/routes/graph.ts` — run node deduplication query (GROUP BY type, normalized_value with email_count) and edge query from data-model.md; build node ids as `{type}::{normalized_value}`; build edge ids from source + target + relationship_type; return GraphResponse shape from contracts/api.md; register route in `backend/src/index.ts`
+- [x] T040 [P] [US5] Add `getGraph(): Promise<GraphResponse>` to `frontend/src/services/api.ts`
+- [x] T041 [P] [US5] Install `reactflow` in `frontend/` and configure in vite.config.ts; import React Flow CSS in `frontend/src/main.tsx`
+- [x] T042 [US5] Implement `GraphPage` in `frontend/src/pages/GraphPage.tsx` — fetch via getGraph() on mount; manage loading/error/data state; map API nodes → React Flow nodes (label from node.label, type badge from node.type, email_count subtitle); map API edges → React Flow edges (label from relationship_type); render ReactFlow component with pan/zoom enabled; on node click highlight connected edges; show EmptyState when nodes array is empty; apply Tailwind responsive layout with touch-friendly controls
 
 **Checkpoint**: US5 complete — graph renders all deduplicated entities; pan/zoom/click work; empty state visible when no processed emails.
 

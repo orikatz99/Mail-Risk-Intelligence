@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  optimizeDeps: {
+    include: ['reactflow'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',
