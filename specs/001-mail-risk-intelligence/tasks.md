@@ -143,8 +143,8 @@ Each story is independently completable and testable.
 
 - [x] T043 [P] Validate 375px viewport layout across InboxPage, EmailDetailPage, AddEmailPage, GraphPage — fix any horizontal overflow or text truncation
 - [x] T044 [P] Add `GET /health` endpoint returning `{ "status": "ok" }` to `backend/src/index.ts`
-- [ ] T045 [P] Write `README.md` — setup and run instructions, architecture overview, key technology decisions and tradeoffs, what you'd do with more time, honest time estimate
-- [ ] T046 [P] Write `PROCESS.md` — document the AI-agent workflow: planning approach, prompting strategy, where autonomous operation was used, where manual correction was applied, how work was broken into sub-tasks
+- [x] T045 [P] Write `README.md` — setup and run instructions, architecture overview, key technology decisions and tradeoffs, what you'd do with more time, honest time estimate
+- [x] T046 [P] Write `PROCESS.md` — document the AI-agent workflow: planning approach, prompting strategy, where autonomous operation was used, where manual correction was applied, how work was broken into sub-tasks
 
 ---
 
