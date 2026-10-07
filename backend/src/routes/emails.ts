@@ -1,8 +1,14 @@
 import { Router } from 'express';
+import multer from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 import { db } from '../db';
+import { queueEmail } from '../services/pipeline';
+import { validateFile } from '../services/ingestion/validator';
+import { extractText } from '../services/ingestion/parser';
 import type { Email } from '../models/types';
 
 const router = Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', (_req, res) => {
   const rows = db.prepare(`
@@ -80,7 +86,81 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// POST /api/emails           — implemented in T035 (US4)
-// POST /api/emails/:id/retry — implemented in T036 (US4)
+router.post('/', upload.single('file'), async (req, res, next) => {
+  try {
+    let content: string;
+
+    if (req.file) {
+      const result = validateFile(req.file.mimetype, req.file.buffer);
+      if (!result.valid) {
+        return res.status(422).json({ detail: result.error });
+      }
+      content = await extractText(req.file.mimetype, req.file.buffer);
+    } else {
+      const body = req.body as { content?: string };
+      if (!body.content || body.content.trim().length === 0) {
+        return res.status(422).json({ detail: 'Email content must not be empty' });
+      }
+      content = body.content;
+    }
+
+    const id = uuidv4();
+    db.prepare(
+      `INSERT INTO emails (id, raw_content, status, source) VALUES (?, ?, 'pending', 'user')`
+    ).run(id, content);
+
+    queueEmail(id);
+
+    const email = db.prepare('SELECT * FROM emails WHERE id = ?').get(id) as Email;
+
+    return res.status(202).json({
+      id: email.id,
+      status: email.status,
+      created_at: email.created_at,
+      sender: null,
+      subject: null,
+      date: null,
+      risk_level: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/:id/retry', (req, res) => {
+  const { id } = req.params;
+
+  const email = db.prepare('SELECT * FROM emails WHERE id = ?').get(id) as Email | undefined;
+  if (!email) {
+    return res.status(404).json({ detail: 'Email not found' });
+  }
+  if (email.status !== 'failed') {
+    return res.status(409).json({ detail: 'Email is not in failed state' });
+  }
+
+  db.transaction(() => {
+    db.prepare('DELETE FROM relationships WHERE email_id = ?').run(id);
+    db.prepare('DELETE FROM entities WHERE email_id = ?').run(id);
+    db.prepare('DELETE FROM risk_assessments WHERE email_id = ?').run(id);
+    db.prepare('DELETE FROM extractions WHERE email_id = ?').run(id);
+    db.prepare(
+      `UPDATE emails SET status = 'pending', error_message = NULL, processed_at = NULL WHERE id = ?`
+    ).run(id);
+  })();
+
+  queueEmail(id);
+
+  const updated = db.prepare('SELECT * FROM emails WHERE id = ?').get(id) as Email;
+
+  return res.status(202).json({
+    id: updated.id,
+    status: updated.status,
+    created_at: updated.created_at,
+    sender: null,
+    subject: null,
+    date: null,
+    risk_level: null,
+  });
+});
 
 export default router;

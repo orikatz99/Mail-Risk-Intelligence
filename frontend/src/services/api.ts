@@ -27,7 +27,20 @@ export function getEmail(id: string): Promise<EmailDetail> {
   return apiFetch<EmailDetail>(`/emails/${id}`)
 }
 
-// Stub — replaced by full implementation in T037 (US4)
-export function retryEmail(_id: string): Promise<EmailSummary> {
-  return Promise.resolve({} as EmailSummary)
+export function submitEmail(content: string): Promise<EmailSummary> {
+  return apiFetch<EmailSummary>('/emails', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content }),
+  })
+}
+
+export function uploadEmailFile(file: File): Promise<EmailSummary> {
+  const form = new FormData()
+  form.append('file', file)
+  return apiFetch<EmailSummary>('/emails', { method: 'POST', body: form })
+}
+
+export function retryEmail(id: string): Promise<EmailSummary> {
+  return apiFetch<EmailSummary>(`/emails/${id}/retry`, { method: 'POST' })
 }
