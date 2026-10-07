@@ -23,7 +23,7 @@ app.use(express.json());
 app.use('/api/emails', emailsRouter);
 app.use('/api/graph', graphRouter);
 
-app.get('/api/health', (_req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
