@@ -48,7 +48,7 @@ cd frontend && npm run dev
 
 Open [http://localhost:5173](http://localhost:5173).
 
-The backend seeds 10 mock emails automatically on first run. The database is stored as `backend/mailbox.db` and persists between runs.
+On first run, the backend loads the 10 seed emails from the provided mock_mailbox_data.json file into the database and processes them through the same pipeline used for user-added emails. The database is stored as backend/mailbox.db and persists between runs.
 
 ### Tests
 
@@ -136,4 +136,4 @@ Approximately 6–7 hours total:
 - ~4 hours: implementation, testing, and debugging
 - ~1 hour: UI polish, manual verification, and documentation
 
-These are estimates rather than tracked times.
+I worked on the project across multiple sessions, so the time breakdown above is an estimate rather than exact tracked time.
