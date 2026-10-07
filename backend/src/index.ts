@@ -3,10 +3,17 @@ import cors from 'cors';
 import 'dotenv/config';
 import { config } from './config';
 import { seed } from './seed';
+import { queueEmail } from './services/pipeline';
+import { db } from './db';
 import emailsRouter from './routes/emails';
 import graphRouter from './routes/graph';
 
 seed();
+
+const pendingEmails = db.prepare(`SELECT id FROM emails WHERE status = 'pending'`).all() as Array<{ id: string }>;
+for (const email of pendingEmails) {
+  queueEmail(email.id);
+}
 
 export const app = express();
 

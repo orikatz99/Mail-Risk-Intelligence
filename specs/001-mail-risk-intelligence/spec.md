@@ -190,7 +190,10 @@ crashing on at least 10 emails worth of entities.
 - What if Agent A (extraction) succeeds but Agent B (risk) fails — partial
   results or full failure?
 - What if the LLM returns a risk level value outside the valid set
-  (none/low/medium/high)?
+  (none/low/medium/high)? → Zod schema validation MUST reject it; the
+  pipeline marks the email `failed`. Invalid risk levels must never be
+  coerced or silently defaulted to "none" — a silent downgrade would hide
+  a broken prompt or model regression.
 - How is an email with no body text (header-only) handled?
 - What is shown in the entities panel when zero entities are extracted?
 

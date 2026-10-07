@@ -13,7 +13,7 @@ export class LlmError extends Error {
 }
 
 const MAX_ATTEMPTS = 3;
-const BASE_DELAY_MS = 1000;
+const BASE_DELAY_MS = 10_000;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
