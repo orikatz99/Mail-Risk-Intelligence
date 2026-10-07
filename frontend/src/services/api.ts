@@ -1,4 +1,4 @@
-import type { EmailSummary } from '../types'
+import type { EmailDetail, EmailSummary } from '../types'
 
 const BASE_URL = 'http://localhost:3000/api'
 
@@ -21,4 +21,13 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
 
 export function getEmails(): Promise<EmailSummary[]> {
   return apiFetch<EmailSummary[]>('/emails')
+}
+
+export function getEmail(id: string): Promise<EmailDetail> {
+  return apiFetch<EmailDetail>(`/emails/${id}`)
+}
+
+// Stub — replaced by full implementation in T037 (US4)
+export function retryEmail(_id: string): Promise<EmailSummary> {
+  return Promise.resolve({} as EmailSummary)
 }
