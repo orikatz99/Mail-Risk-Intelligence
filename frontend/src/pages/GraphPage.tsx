@@ -164,7 +164,7 @@ export default function GraphPage() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-      <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-3">
+      <div className="flex items-center gap-3 border-b border-gray-200 bg-blue-100 px-4 py-3">
         <Link to="/" className="text-sm text-blue-600 hover:text-blue-800">
           ← Back
         </Link>

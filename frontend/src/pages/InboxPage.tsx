@@ -40,14 +40,16 @@ export default function InboxPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+      <div className="flex items-center justify-between border-b border-gray-200 bg-blue-100 px-4 py-3">
         <h1 className="text-lg font-semibold text-gray-900">Inbox</h1>
-        <Link
-          to="/add"
-          className="text-sm font-medium text-blue-600 hover:text-blue-800"
-        >
-          + Add email
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link to="/graph" className="text-sm font-medium text-blue-600 hover:text-blue-800">
+            Graph
+          </Link>
+          <Link to="/add" className="text-sm font-medium text-blue-600 hover:text-blue-800">
+            + Add Email
+          </Link>
+        </div>
       </div>
 
       {error ? (

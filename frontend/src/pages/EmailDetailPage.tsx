@@ -80,8 +80,8 @@ export default function EmailDetailPage() {
   const isProcessing = email.status === 'pending' || email.status === 'processing'
 
   return (
-    <div className="mx-auto max-w-2xl space-y-4 p-4">
-      <div className="flex flex-wrap items-center gap-3">
+    <div className="mx-auto max-w-2xl">
+      <div className="flex flex-wrap items-center gap-3 border-b border-gray-200 bg-blue-100 px-4 py-3">
         <Link to="/" className="text-sm text-blue-600 hover:text-blue-800">
           ← Back
         </Link>
@@ -89,6 +89,7 @@ export default function EmailDetailPage() {
         <span className="text-xs capitalize text-gray-400">{email.status}</span>
       </div>
 
+      <div className="space-y-4 p-4">
       {email.status === 'failed' && (
         <ErrorState
           message={email.error_message ?? 'Processing failed'}
@@ -182,6 +183,7 @@ export default function EmailDetailPage() {
           <EntityPanel entities={email.entities} relationships={email.relationships} />
         )}
       </SectionCard>
+      </div>
     </div>
   )
 }

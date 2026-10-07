@@ -78,14 +78,15 @@ export default function AddEmailPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg p-4">
-      <div className="mb-4 flex items-center gap-3">
+    <div className="mx-auto max-w-lg">
+      <div className="flex items-center gap-3 border-b border-gray-200 bg-blue-100 px-4 py-3">
         <Link to="/" className="text-sm text-blue-600 hover:text-blue-800">
           ← Back
         </Link>
         <h1 className="text-lg font-semibold text-gray-900">Add Email</h1>
       </div>
 
+      <div className="p-4">
       <div className="mb-4 flex rounded-lg border border-gray-200 bg-gray-100 p-0.5">
         <button
           type="button"
@@ -146,6 +147,7 @@ export default function AddEmailPage() {
           {submitting ? 'Submitting…' : 'Submit'}
         </button>
       </form>
+      </div>
     </div>
   )
 }

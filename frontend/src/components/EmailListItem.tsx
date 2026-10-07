@@ -7,7 +7,10 @@ interface Props {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  const d = new Date(iso)
+  const day = d.getDate()
+  const month = d.toLocaleDateString('he', { month: 'short' })
+  return `${day} ${month}`
 }
 
 export default function EmailListItem({ email }: Props) {
@@ -27,7 +30,7 @@ export default function EmailListItem({ email }: Props) {
       <div className="flex flex-shrink-0 flex-col items-end gap-1">
         <RiskBadge risk_level={email.risk_level} />
         {email.date && (
-          <span className="text-xs text-gray-400">{formatDate(email.date)}</span>
+          <span className="text-xs text-gray-400" dir="ltr">{formatDate(email.date)}</span>
         )}
       </div>
     </Link>
