@@ -23,23 +23,24 @@ in LLM output parsing.
 
 ## Decision 2: LLM Provider
 
-**Decision**: Groq API (free tier) as primary; Google Gemini free tier and Ollama
-documented as alternatives.
+**Decision**: Groq API (free tier) — single provider.
 
 **Rationale**: Groq's free tier offers the highest throughput (~14,400 req/day)
 with the fastest inference speeds. `llama-3.1-70b-versatile` on Groq performs well
-on structured extraction and risk classification. The `groq` Node.js SDK is
-well-maintained and supports `async/await`.
+on structured extraction and risk classification. The `groq-sdk` Node.js package is
+well-maintained and supports `async/await`. Supporting multiple providers added
+configuration surface area with no concrete benefit for this assignment scope, so
+Gemini and Ollama were removed.
 
 **Alternatives considered**:
-- Google Gemini free tier: 15 RPM / 1M tokens/day. Viable fallback; documented
-  in README and `.env.example`.
-- Ollama (local): Zero API dependency, fully offline. Slower on CPU-only machines;
-  documented as fallback for air-gapped environments.
+- Google Gemini free tier: 15 RPM / 1M tokens/day. Viable, but the multi-provider
+  abstraction was cut — `@google/generative-ai` dependency removed.
+- Ollama (local): Zero API dependency, fully offline. Removed along with Gemini;
+  can be re-added by swapping `llm/client.ts` if needed.
 
-**Provider abstraction**: `backend/src/services/llm/client.ts` exposes a single
-`async function complete(prompt: string): Promise<string>`. Switching providers
-requires only changing the `LLM_PROVIDER` environment variable.
+**Abstraction**: `backend/src/services/llm/client.ts` exposes a single
+`async function complete(prompt: string): Promise<string>`. Replacing the provider
+requires only editing that one file.
 
 ---
 

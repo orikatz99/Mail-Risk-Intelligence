@@ -12,7 +12,7 @@ entities, and typed relationships. Both agents validate LLM output at runtime
 using Zod schemas. Results persist in SQLite via better-sqlite3. A React/TypeScript
 SPA surfaces a risk-sorted inbox, email detail view, entities panel, and an optional
 interactive knowledge graph (bonus). Backend: Node.js 20 / Express / TypeScript.
-LLM: Groq free API (primary).
+LLM: Groq free API.
 
 ## Technical Context
 
@@ -36,7 +36,7 @@ failure surfaced ≤ 5s (SC-003)
 |-----------|------|--------|-------|
 | I. Clean Architecture Separation | Ingestion, pipeline, storage, API, UI are separate modules with no cross-layer coupling | ✅ PASS | `ingestion/` → `services/pipeline.ts` → better-sqlite3 queries → `routes/` → frontend `services/api.ts` → `pages/` |
 | II. Resilient Agent Pipeline | Every LLM call wrapped; failures degrade gracefully; UI surfaces error state | ✅ PASS | `llm/client.ts` wraps all calls with retry/backoff; Zod validates LLM output; email status transitions enforced (FR-010, FR-014) |
-| III. Free-Tier LLM Mandate | No paid key required; provider swappable via env var; `.env.example` + README document fallback | ✅ PASS | Groq default; `LLM_PROVIDER` env var switches to Gemini or Ollama; README documents all three |
+| III. Free-Tier LLM Mandate | No paid key required; `.env.example` documents required keys | ✅ PASS | Groq only; `GROQ_API_KEY` + `GROQ_MODEL` required; no paid service used |
 | IV. Tested Core Pipeline | One test per agent; tests run without live LLM | ✅ PASS | `tests/unit/agent-extraction.test.ts` + `tests/unit/agent-risk.test.ts`; LLM client stubbed via Vitest mock |
 | V. Responsive & Accessible UI | ≤375px functional; WCAG AA badges; loading/empty/error states everywhere | ✅ PASS | Tailwind responsive classes; badge colors meet AA contrast; all pages handle loading/empty/error states via useState/useEffect |
 
